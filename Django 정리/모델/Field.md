@@ -78,5 +78,44 @@ class Student(models.Model):
 파이썬에서 제공하는 **enum**과 유사하지만 몇가지 수정되었다.
 
 - Enum의 멤버변수는 명확한 데이터 타입으로 이루어진 튜플인자로 구성된다. 장고는 **label**이라는 사람이 읽을 수 있는 문자열을 추가할 수 있는 기능을 지원한다. 대부분의 경우에는 **(value, label)** 형태의 튜플로 사용된다.
-- 
+- **.label** 프로퍼티가 변수에 더해져, 사람이 읽을 수 있는 값을 반환한다.
+- Enumeration 클래스에 몇가지 커스텀 프로퍼티가 추가되었다. - **.choices**, **.labels**, **values**, **.names** - 이는 Enumeration 클래스에 각 부분을 리스트로 접근하기 쉽게 만들기 위해서다.
+- **enum.unique()**는 값의 중복을 제한한다. 
+
+**YearInSchool.SENIOR.YearInSchool['SENIOR']**나 **YearInSchool('SR')**로 enum 멤버에 접근하는 것은 **.name**이나 **.value** 프로퍼티로 멤버에 접근하는 것과 같은 방식으로 작동한다.
+
+만약 사람이 읽을 수 있는 값이 필요가 없다면, 멤버의 이름으로 추론하게 된다.
+
+```python
+class Vehicle(models.TextChoices):
+    CAR = 'C'
+    TRUCK = 'T'
+    JET_SKI = 'J'
+    
+Vehicle.JET_SKI.label
+# 'Jet Ski'
+```
+
+enum의 값으로 숫자를 자주 사용하기 때문에, 장고는 **IntegerChoices** 클래스를 지원한다.
+
+```python
+class Card(models.Model):
+
+    class Suit(models.IntegerChoices):
+        DIAMOND = 1
+        SPADE = 2
+        HEART = 3
+        CLUB = 4
+
+    suit = models.IntegerField(choices=Suit.choices)
+```
+
+Enum 함수형 API를 활용하여 레이블을 자동으로 생성하게 할 수 있다.
+
+```python
+MedalType = models.TextChoices('MedalType', 'GOLD SILVER BRONZE')
+MedalType.choices # [('GOLD', 'Gold'), ('SILVER', 'Silver'), ('BRONZE', 'Bronze')]
+place = models.IntegerChoices('Place', 'FIRST SECOND THiRD')
+place # [(1, 'First'), (2, 'Second'), (3, 'Third')]
+```
 
