@@ -1,10 +1,16 @@
 # Django Rest Framework API Guides
 
-### - [Request](./Request.md)
+### - [Request](./RequestAndResponse/Request.md)
 
-### - [Response](./Response.md)
+### - [Response](./RequestAndResponse/Response.md)
 
-### - [Views](./Views.md)
 
-### \- [GenericViews](./GenericViews.md)
+
+### - [Views](./Views/Views.md)
+
+### \- [GenericViews](./Views/GenericViews.md)
+
+### \- [ViewSets](./Views/ViewSets.md)
+
+
 
