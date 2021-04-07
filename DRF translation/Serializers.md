@@ -246,3 +246,37 @@ class EventSerializer(serializers.Serializer):
         return data
 ```
 
+
+
+##### validator
+
+serializer의 각각의 필드는 필드 인스턴스에 validator 선언하여 validator를 가질 수 있다.
+
+```python
+def multiple_of_ten(value):
+    if value % 10 != 0:
+        raise serializers.ValidationError('Not a multiple of ten')
+
+class GameRecord(serializers.Serializer):
+    score = IntegerField(validators=[multiple_of_ten])
+    ...
+```
+
+serializer 클래스들 역시 재사용 가능한 validator를 포함하여 필드 데이터 셋에 적용시킬 수 있다. 이 validator들은 내부의 `Meta` 클래스에서 선언된다.
+
+```python
+class EventSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    room_number = serializers.IntegerField(choices=[101, 102, 103, 201])
+    date = serializers.DateField()
+
+    class Meta:
+        # 각각의 방은 하루에 하나의 이벤트를 가진다.
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Event.objects.all(),
+                fields=['room_number', 'date']
+            )
+        ]
+```
+
